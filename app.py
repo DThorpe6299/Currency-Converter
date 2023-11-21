@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, flash
-from currency-converter import CurrencyConverter, ForexPythonException
+from currency_converter import CurrencyConverter, ForexPythonException
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-converter'
@@ -11,7 +12,7 @@ def converter_form():
     return render_template('converter-form.html')
 
 @app.route('/converter')
-def convert_currency(from_currency, to_currency, amount):
+def convert_currency():
     try:
         initial_currency = request.form.get('initial-currency')
         desired_currency = request.form.get('desired-currency')
@@ -33,3 +34,6 @@ def convert_currency(from_currency, to_currency, amount):
 def validate_currency_code(currency_code):
     if not CurrencyConverter.is_valid_currency_code(currency_code):
         raise ForexPythonException(f'Invalid currency code: {currency_code}')
+
+if __name__ == "__main__":
+    app.run()
